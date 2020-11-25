@@ -31,10 +31,13 @@ module.exports = async (req, res) => {
     custom_title,
     locale,
     disable_animations,
+    response_type
   } = req.query;
   let stats;
 
-  res.setHeader("Content-Type", "image/svg+xml");
+  if(!response_type){
+    res.setHeader("Content-Type", "image/svg+xml");
+  }
 
   if (blacklist.includes(username)) {
     return res.send(renderError("Something went wrong"));
@@ -50,6 +53,10 @@ module.exports = async (req, res) => {
       parseBoolean(count_private),
       parseBoolean(include_all_commits),
     );
+
+    if(response_type === 'json'){
+      return res.send(stats);
+    }
 
     const cacheSeconds = clampValue(
       parseInt(cache_seconds || CONSTANTS.TWO_HOURS, 10),

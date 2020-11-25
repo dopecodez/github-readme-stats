@@ -221,4 +221,21 @@ describe("Test /api/", () => {
       ),
     );
   });
+
+  it("should return json response when called with responseType", async () => {
+    const { req, res } = faker(
+      {
+        username: "anuraghazra",
+        response_type: 'json',
+      },
+      data,
+    );
+
+    await api(req, res);
+
+    expect(res.send).toBeCalledWith(
+      {
+        ...stats,
+      })
+  });
 });
